@@ -149,4 +149,4 @@ if st.button("🔍 Analyze News"):
 
 # --- Footer ---
 st.markdown("---")
-st.markdown("<p style='text-align: center; font-size: 14px;'>Made By Irteja, Mostak, Sagor using Streamlit | © 2025</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size: 14px;'>Made By Irteja, Mostak, Sagor using Streamlit | Updated Pankaj | © 2025</p>", unsafe_allow_html=True)
