@@ -123,7 +123,7 @@ bash
 - hardware
   ```
   CPU: Intel Xeon 6226R / Normal CPU work
-  GPU: No Needed (24GB)
+  GPU: No Needed
   RAM: At least 8GB
   ```
 
