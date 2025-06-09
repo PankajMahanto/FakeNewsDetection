@@ -86,6 +86,39 @@ else:
 # --- Language Detection + Translation ---
 lang_option = st.checkbox("🌐 Translate to English (Auto-detect Language)", value=True)
 
+# -----Bert logic add Start here------
+
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# Load the fine-tuned BERT model and tokenizer
+tokenizer_bert = AutoTokenizer.from_pretrained("./bert_fakenews")
+bert_model = AutoModelForSequenceClassification.from_pretrained("./bert_fakenews")
+bert_model.eval()
+
+
+def predict_with_bert(text):
+    inputs = tokenizer_bert(text, return_tensors="pt", truncation=True, padding=True, max_length=512)
+    with torch.no_grad():
+        outputs = bert_model(**inputs)
+        logits = outputs.logits
+        probabilities = torch.softmax(logits, dim=1)
+        predicted_label = torch.argmax(probabilities, dim=1).item()
+        confidence = probabilities[0][predicted_label].item()
+    return predicted_label, confidence
+
+# def predict_with_bert(text):
+#     inputs = tokenizer_bert(text, return_tensors="pt", truncation=True, padding=True, max_length=512)
+#     inputs = {k: v.to(device) for k, v in inputs.items()}
+#     with torch.no_grad():
+#         outputs = bert_model(**inputs)
+#         logits = outputs.logits
+#         probabilities = torch.softmax(logits, dim=1)[0]  # 1D tensor
+#     return probabilities.cpu().numpy()  # Returns array like: [fake_prob, real_prob]
+
+# -----Bert logic add End here------
+
 # --- Prediction ---
 if st.button("🔍 Analyze News"):
     if inputn.strip():
@@ -143,10 +176,27 @@ if st.button("🔍 Analyze News"):
 
             st.markdown(f"**Naive Bayes:** {'🟢 Real' if nb_pred == 1 or nb_pred == 'Real' else '🔴 Fake'}")
             st.markdown(f"🟢 Real: `{nb_conf[1]*100:.2f}%` | 🔴 Fake: `{nb_conf[0]*100:.2f}%`")
+            
+            # Bert logic add here----
+            # --- After Naive Bayes ---
+            st.markdown("<hr>", unsafe_allow_html=True)
+
+            # --- BERT Prediction ---
+            bert_pred, bert_conf = predict_with_bert(cleaned)
+            st.markdown(f"**BERT (Transformer):** {'🟢 Real' if bert_pred == 1 else '🔴 Fake'}")
+            st.markdown(f"🧠 Confidence: `{bert_conf * 100:.2f}%`")
+            # bert_probs = predict_with_bert(cleaned)
+            # bert_fake_pct = bert_probs[0] * 100
+            # bert_real_pct = bert_probs[1] * 100
+            # bert_pred = "Real" if bert_real_pct > bert_fake_pct else "Fake"
+
+            # st.markdown(f"**BERT (Transformer):** {'🟢 Real' if bert_pred == 'Real' else '🔴 Fake'}")
+            # st.markdown(f"🟢 Real: `{bert_real_pct:.2f}%` | 🔴 Fake: `{bert_fake_pct:.2f}%`")
+  
 
     else:
         st.warning("⚠️ Please enter a news article or valid URL.")
 
 # --- Footer ---
 st.markdown("---")
-st.markdown("<p style='text-align: center; font-size: 14px;'>Made By Irteja, Mostak, Sagor using Streamlit | Updated Pankaj | © 2025</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size: 14px;'>Made By Irteja using Streamlit |</br> Updated By Pankaj Mahanta | © 2025</p>", unsafe_allow_html=True)
