@@ -7,6 +7,9 @@ A real-time fake news detection web application built using a fine-tuned BERT mo
 The Fake News Detection Web Application is a locally deployed tool that uses traditional machine learning algorithms like Logistic Regression and Random Forest to classify news articles as real or fake. It offers a simple web interface for real-time predictions, aiming to combat misinformation and promote media awareness.
 
 ---
+## 🧠 Model Architecture: BERT-Powered Fake News Detection System
+![Working](./test-output/Fnd.png)
+---
 ## 🧪 Screenshots
 ![Home](./test-output/1.png)
 --
