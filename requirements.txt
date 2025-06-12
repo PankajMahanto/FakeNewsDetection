@@ -10,3 +10,8 @@ newspaper3k
 matplotlib
 seaborn
 lxml[html_clean]
+transformers
+torch
+langdetect
+deep-translator
+
