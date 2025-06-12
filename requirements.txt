@@ -9,3 +9,4 @@ deep-translator
 newspaper3k
 matplotlib
 seaborn
+lxml[html_clean]
